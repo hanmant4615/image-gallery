@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Gallery from "./Gallery";
+import "./App.css";
+import { url } from "./utils";
 
 function App() {
+  const [photoGalleryArray, updatePhotoGalleryArray] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(url)
+      .then((response) => {
+        updatePhotoGalleryArray(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav className="navbar navbar-dark bg-dark">
+        <div className="w-100 text-light">Image Gallery</div>
+      </nav>
+      <div className="row">
+        <Gallery images={photoGalleryArray} />
+      </div>
     </div>
   );
 }
